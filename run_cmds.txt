@@ -1,0 +1,36 @@
+running training on giger dataset (its already modified to 360x360 scale); the print freq 64 comes from a total of 192 training samples, so it evenly divides
+
+python train.py --dataroot ./datasets/giger --name giger_0_cyclegan --model cycle_gan --n_epochs 5 --n_epochs_decay 5 --print_freq 64 --load_size 360
+
+
+holy smokes that was so fast compared to non-gpu, going to rerun but with the full 100 default epochs:
+
+python train.py --dataroot ./datasets/giger --name giger_1_cyclegan --model cycle_gan --print_freq 64 --load_size 360
+
+
+
+idea for possible improvements:
+-
+
+vastly exapamnded the giger dataset, gonna try to retrain again. also resized to 256 instead of 360
+
+python train.py --dataroot ./datasets/giger --name giger_2_cyclegan --model cycle_gan --print_freq 60 --save_epoch_freq 25
+
+
+maybe need to also up the trainA dataset? just using random images from the vangoe dataset
+
+alright yup got a bunch of different images, gonna try to run now
+
+python train.py --dataroot ./datasets/giger --name giger_3_cyclegan --model cycle_gan --print_freq 90 --save_epoch_freq 25
+
+i think next training gonna rescale the giger pics to be larger
+or actually just leaving them as original and changing --load_size and the way its preprocessed
+
+tried testing out the giger_2 model (had to copylatest_net_G_A.pth to be called latest_net_G.pth)
+python test.py --dataroot ./datasets/test/testA --name giger_2_cyclegan --model test --no_dropout
+
+
+improved(?) trainA set and full scale giger images:
+python train.py --dataroot ./datasets/giger_1024 --name giger_4_cyclegan --model cycle_gan --print_freq 100 --save_epoch_freq 25 --preprocess scale_width_and_crop --load_size 1024 --crop_size 360
+
+ok stopped early with that, hit issue where its too zoomed in for both trainA and trainB
